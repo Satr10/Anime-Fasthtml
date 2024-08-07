@@ -4,10 +4,10 @@ from typing import List, Dict, Any, Optional
 API_URL = "https://graphql.anilist.co"
 
 
-def fetch_trending_anime(page: int) -> List[Dict[str, Any]]:
+def fetch_trending_anime(page: int, limit: int = 12) -> List[Dict[str, Any]]:
     query = f"""
     query {{
-        Page(page: {page}, perPage: 12) {{
+        Page(page: {page}, perPage: {limit}) {{
             media(sort: TRENDING_DESC, type: ANIME) {{
                 id
                 title {{

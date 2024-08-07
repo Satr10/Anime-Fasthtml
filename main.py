@@ -23,7 +23,7 @@ def home():
         "Contact": "/contact",
         "Trending": "/trending",
     }
-    trending_animes = fetch_trending_anime(1)
+    trending_animes = fetch_trending_anime(1, 12)
     return (
         Title("Anime"),
         Body(
@@ -77,7 +77,7 @@ def redirect_to_trending_page():
 
 
 @app.get("/trending/{page:int}")
-def trending_page(page: int = 1):
+def trending_page(page: int = 1, limit: int = 36):
     page = int(page)
     navbar_links = {
         "Home": "/",
