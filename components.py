@@ -89,7 +89,9 @@ def warning():
 
 
 def kartu(judul: str, rating: int, gambar: str, id: int):
-    star_rating = "★" * rating + "☆" * (5 - rating)
+    star_rating = (
+        "★" * rating + "☆" * (5 - rating) if rating is not None else "No Rating"
+    )
     return Div(
         Figure(
             Img(

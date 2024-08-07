@@ -4,6 +4,10 @@ from typing import List, Dict, Any, Optional
 API_URL = "https://graphql.anilist.co"
 
 
+import requests
+from typing import List, Dict, Any
+
+
 def fetch_trending_anime(page: int, limit: int = 12) -> List[Dict[str, Any]]:
     query = f"""
     query {{
@@ -35,15 +39,19 @@ def fetch_trending_anime(page: int, limit: int = 12) -> List[Dict[str, Any]]:
         return []
 
     animes = []
-    for anime in data["data"]["Page"]["media"]:
+    for anime in data.get("data", {}).get("Page", {}).get("media", []):
+        title = anime.get("title", {}).get("romaji", "Unknown Title")
+        cover_image = anime.get("coverImage", {}).get("large", "No Image Available")
+        average_score = anime.get("averageScore")
         rating = (
-            anime.get("averageScore", 0) // 20
-        )  # Convert averageScore to stars (1-5)
+            (average_score // 20) if average_score is not None else None
+        )  # Convert averageScore to stars (0-5)
+
         anime_info = {
-            "judul": anime["title"]["romaji"],
+            "judul": title,
             "rating": rating,
-            "gambar": anime["coverImage"]["large"],
-            "id": anime["id"],
+            "gambar": cover_image,
+            "id": anime.get("id", "Unknown ID"),
         }
         animes.append(anime_info)
 
