@@ -11,6 +11,8 @@ from utils import (
 from components import *
 import datetime
 
+from get_download import cari_anime, get_episode, get_download
+
 COMMON_NAVBAR_LINKS = {
     "Home": "/",
     "Tentang": "/about",
