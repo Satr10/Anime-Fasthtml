@@ -113,13 +113,13 @@ def kartu(judul: str, rating: int, gambar: str, id: int):
     )
 
 
-def kumpulan_kartu(kategori: str, animes: list):
+def kumpulan_kartu(kategori: str, animes: list, link: str):
     cards = [
         kartu(anime["judul"], anime["rating"], anime["gambar"], anime["id"])
         for anime in animes
     ]
     return Div(
-        Div(A(H2(kategori, cls="text-2xl font-bold"), href="/trending"), cls="mb-4"),
+        Div(A(H2(kategori, cls="text-2xl font-bold"), href=link), cls="mb-4"),
         Div(
             *cards,
             cls="flex flex-wrap gap-4 mx-auto justify-center items-center",
@@ -139,9 +139,9 @@ def footer():
     )
 
 
-def page_navigation(current_page: int = 1, total_pages: int = 1):
+def page_navigation(current_page: int = 1, has_next_page: bool = False):
     prev_page = current_page - 1 if current_page > 1 else 1
-    next_page = current_page + 1 if current_page < total_pages else total_pages
+    next_page = current_page + 1 if has_next_page else current_page
     return Div(
         Div(
             A(
@@ -158,6 +158,7 @@ def page_navigation(current_page: int = 1, total_pages: int = 1):
                 "»",
                 href=f"/trending/{next_page}",
                 cls="join-item btn",
+                disabled=not has_next_page,
             ),
             cls="join",
         ),

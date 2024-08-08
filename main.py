@@ -1,6 +1,6 @@
 from fasthtml.common import *
 from fasthtml.components import NotStr
-from utils import fetch_trending_anime, anime_info, fetch_anime_season
+from utils import fetch_trending_anime, anime_info, fetch_anime_season, fetch_movie
 from components import *
 import datetime
 
@@ -26,14 +26,19 @@ def home():
     }
     trending_animes = fetch_trending_anime(1)
     this_season = fetch_anime_season(1, 12)
+    this_season_movies = fetch_movie(1, 12)
     return (
         Title("Anime"),
         Body(
             create_navbar(navbar_links),
             warning(),
-            kumpulan_kartu("Trending Anime", trending_animes),
+            kumpulan_kartu("Trending Anime", trending_animes, "/trending/1"),
             pemisah(),
-            kumpulan_kartu("This Season", this_season),
+            kumpulan_kartu("This Season", this_season, "/this-season/1"),
+            pemisah(),
+            kumpulan_kartu(
+                "This Season Movies", this_season_movies, "/season-movies/1"
+            ),
             pemisah(),
             footer(),
         ),
@@ -141,14 +146,74 @@ def trending_page(page: int = 1):
         "Trending": "/trending",
     }
     trending_animes = fetch_trending_anime(page, 36)
+    has_next_page = len(trending_animes) == 36
     return (
         Title("Anime | Trending"),
         Body(
             create_navbar(navbar_links),
             warning(),
-            kumpulan_kartu("Trending Anime", trending_animes),
+            kumpulan_kartu("Trending Anime", trending_animes, "/trending/1"),
             pemisah(),
-            page_navigation(page, 9999),
+            page_navigation(page, has_next_page),
+            footer(),
+        ),
+    )
+
+
+@app.get("/this-season")
+def redirect_to_trending_page():
+    return RedirectResponse(url="/this-season/1")
+
+
+@app.get("/this-season/{page:int}")
+def this_season_page(page: int = 1):
+    page = int(page)
+    navbar_links = {
+        "Home": "/",
+        "About": "/about",
+        "Contact": "/contact",
+        "Trending": "/trending",
+    }
+    this_season = fetch_anime_season(page, 36)
+    has_next_page = len(this_season) == 36
+    return (
+        Title("Anime | Trending"),
+        Body(
+            create_navbar(navbar_links),
+            warning(),
+            kumpulan_kartu("Season Ini", this_season, "/season-movies/1"),
+            pemisah(),
+            page_navigation(page, has_next_page),
+            footer(),
+        ),
+    )
+
+
+@app.get("/season-movies")
+def redirect_to_trending_page():
+    return RedirectResponse(url="/season-movies/1")
+
+
+@app.get("/season-movies/{page:int}")
+def this_season_movies(page: int = 1):
+    page = int(page)
+    navbar_links = {
+        "Home": "/",
+        "About": "/about",
+        "Contact": "/contact",
+        "Trending": "/trending",
+    }
+    this_season = fetch_movie(page, 36)
+    has_next_page = len(this_season) == 36
+
+    return (
+        Title("Anime | Trending"),
+        Body(
+            create_navbar(navbar_links),
+            warning(),
+            kumpulan_kartu("Movies Season Ini", this_season, "/season-movies/1"),
+            pemisah(),
+            page_navigation(page, has_next_page),
             footer(),
         ),
     )
