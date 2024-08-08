@@ -173,14 +173,14 @@ def download_page(slug: str):
         Body(
             create_navbar(navbar_links),
             warning(),
-            pemisah(),
+            pemisah(),Div(
             *[
                 create_button_with_links(
-                    f"{link['Episode']} {link['Resolution']} {link['Format']}",
+                    f"{link['Episode'].replace('Subtitle Indonesia', '')} {link['Resolution']} {link['Format']} {link['Provider']}",
                     link['URL']
                 )
                 for link in all_download_links
-            ],
+            ], cls="flex flex-row flex-wrap gap-4"),
             pemisah(),
             footer(),
         ),
