@@ -1,107 +1,127 @@
-import requests
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import logging
-import json
-
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s: %(message)s")
-
 API_LINK = "https://otakudesu-unofficial-api.vercel.app/v1"
 
 
 def cari_anime(query: str):
     response = requests.get(f"{API_LINK}/search/{query}")
-    try:
-        response.raise_for_status()
-        data = response.json()
-        if "Error" in data:
-            logging.error(f"Error in API response: {data['errors']}")
-            return []
-        return [
-            {"Judul": anime["title"], "Slug": anime["slug"]}
-            for anime in data.get("data", [])
-        ]
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching anime search results: {e}")
+    if response.status_code != 200:
+        print(f"HTTP Error: {response.status_code}")
+        print(response.text)
         return []
-    except json.JSONDecodeError as e:
-        logging.error(f"Error decoding API response: {e}")
+
+    data = response.json()
+    if "Error" in data:
+        print(f"Errors: {data['errors']}")
         return []
+
+    hasil = []
+    for anime in data.get("data", []):
+        judul = anime["title"]
+        slug = anime["slug"]
+
+        isian = {"Judul": judul, "Slug": slug}
+        hasil.append(isian)
+
+    return hasil  # Mengembalikan list hasil, bukan isian
 
 
 def get_episode(slug: str):
     response = requests.get(f"{API_LINK}/anime/{slug}")
-    try:
-        response.raise_for_status()
-        data = response.json()
-        if "Error" in data:
-            logging.error(f"Error in API response: {data['errors']}")
-            return []
-        return [
-            {"Slug": episode["slug"], "Episode": episode["episode"]}
-            for episode in data.get("data", {}).get("episode_lists", [])
-        ]
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching episodes for slug {slug}: {e}")
+    if response.status_code != 200:
+        print(f"HTTP Error: {response.status_code}")
+        print(response.text)
         return []
-    except json.JSONDecodeError as e:
-        logging.error(f"Error decoding API response for slug {slug}: {e}")
+
+    data = response.json()
+    if "Error" in data:
+        print(f"Errors: {data['errors']}")
         return []
+
+    hasil = []
+    for episode in data.get("data", []).get("episode_lists", []):
+        slug = episode["slug"]
+        eps = episode["episode"]
+
+        isi = {"Slug": slug, "Episode": eps}
+        hasil.append(isi)
+
+    return hasil
+
+
+import requests
 
 
 def get_download(slug: str):
     response = requests.get(f"{API_LINK}/episode/{slug}")
-    try:
-        response.raise_for_status()
-        data = response.json()
-        if "Error" in data:
-            logging.error(f"Error in API response: {data['errors']}")
-            return []
-        episode_info = data.get("data", {})
-        episode_description = episode_info.get("episode", "No description available")
-        return [
-            {
-                "Episode": episode_description,
-                "Format": format_type,
-                "Resolution": resolution["resolution"],
-                "Provider": url["provider"],
-                "URL": url["url"],
-            }
-            for format_type in ["mp4", "mkv"]
-            for resolution in episode_info.get("download_urls", {}).get(format_type, [])
-            for url in resolution["urls"]
-        ]
-    except requests.exceptions.RequestException as e:
-        logging.error(f"Error fetching download links for slug {slug}: {e}")
-        return []
-    except json.JSONDecodeError as e:
-        logging.error(f"Error decoding API response for slug {slug}: {e}")
+    if response.status_code != 200:
+        print(f"HTTP Error: {response.status_code}")
+        print(response.text)
         return []
 
+    data = response.json()
+    if "Error" in data:
+        print(f"Errors: {data['errors']}")
+        return []
 
-def fetch_episode_data(slug: str):
-    return get_download(slug)
+    episode_info = data.get("data", {})
+    episode_description = episode_info.get("episode", "No description available")
+
+    download_links = []
+    for format_type in ["mp4", "mkv"]:
+        for resolution in episode_info.get("download_urls", {}).get(format_type, []):
+            res = resolution["resolution"]
+            urls = resolution["urls"]
+            for url in urls:
+                provider = url["provider"]
+                link = url["url"]
+                download_links.append(
+                    {
+                        "Episode": episode_description,
+                        "Format": format_type,
+                        "Resolution": res,
+                        "Provider": provider,
+                        "URL": link,
+                    }
+                )
+
+    return download_links
 
 
 def main():
-    episode_slugs = [
-        episode["Slug"] for episode in get_episode("shikanoko-nokotan-sub-indo")
-    ]
+    episode = get_episode("shikanoko-nokotan-sub-indo")
+    slugs = []
+    for slug in episode:
+        slug_ = slug["Slug"]
+        slugs.append(slug_)
+    for slug in slugs:
+        data = get_download(slug)
+        urls = []
+        for item in data:
+            provider = item["Provider"]
+            link = item["URL"]
+            resolution = item["Resolution"]
+            format_type = item["Format"]
+            eps = item["Episode"]
 
-    download_links = []
-    with ThreadPoolExecutor() as executor:
-        future_to_slug = {
-            executor.submit(fetch_episode_data, slug): slug for slug in episode_slugs
-        }
-        for future in as_completed(future_to_slug):
-            slug = future_to_slug[future]
-            try:
-                data = future.result()
-                download_links.extend(data)
-            except Exception as e:
-                logging.error(f"Error fetching data for slug {slug}: {e}")
+            isi = {
+                "Episode": eps,
+                "Provider": provider,
+                "URL": link,
+                "Resolution": resolution,
+                "Format": format_type,
+            }
+            urls.append(isi)
+        print(urls)
 
-    logging.info(download_links)
+    # data = get_download("sknk-episode-3-sub-indo")
+    # for item in data:
+    #     provider = item["Provider"]
+    #     link = item["URL"]
+    #     resolution = item["Resolution"]
+    #     format_type = item["Format"]
+    #     eps = item["Episode"]
+    #     print(f"{eps} - {provider} - {resolution} - {format_type} - {link}")
 
 
+# Example usage
 if __name__ == "__main__":
     main()
