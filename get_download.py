@@ -18,6 +18,8 @@ def request_json(url: str):
 
 
 def cari_anime(query: str):
+    query = query.replace(" ", "%20")
+    print(f"Searching: {query}")
     data = request_json(f"{API_LINK}/search/{query}")
     if "Error" in data:
         print(f"Errors: {data['errors']}")

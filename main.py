@@ -59,6 +59,9 @@ def home():
 def anime_page(id: int):
     navbar_links = COMMON_NAVBAR_LINKS
     anime_data = anime_info(id)
+    list_pencarian = cari_anime(
+        anime_data["title"],
+    )
     return (
         Title(f"Anime | {anime_data['title']}"),
         Body(
@@ -109,7 +112,15 @@ def anime_page(id: int):
                     P(NotStr(anime_data["description"])),
                 ),
                 pemisah(),
-                Div(H2("Episodes")),
+                Div(
+                    H2("Download"),
+                    *[
+                        Div(
+                            create_button_with_links(f"{link['Judul']}", f"/download/{link["Slug"]}"),
+                        )
+                        for link in list_pencarian
+                    ],
+                ),  # lanjutkan
                 pemisah(),
             ),
             footer(),
@@ -143,6 +154,38 @@ def contact_page():
             footer(),
         ),
     )
+
+
+@app.get("/download/{slug}")
+def download_page(slug: str):
+    navbar_links = COMMON_NAVBAR_LINKS
+    episodes = get_episode(slug)
+    
+    # Mengumpulkan semua link download untuk setiap episode
+    all_download_links = []
+    for episode in episodes:
+        episode_slug = episode["Slug"]
+        download_links = get_download(episode_slug)
+        all_download_links.extend(download_links)
+    
+    return (
+        Title(f"Anime | Downloads for {slug}"),
+        Body(
+            create_navbar(navbar_links),
+            warning(),
+            pemisah(),
+            *[
+                create_button_with_links(
+                    f"{link['Episode']} {link['Resolution']} {link['Format']}",
+                    link['URL']
+                )
+                for link in all_download_links
+            ],
+            pemisah(),
+            footer(),
+        ),
+    )
+
 
 
 @app.get("/trending")
