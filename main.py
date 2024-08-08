@@ -1,7 +1,8 @@
 from fasthtml.common import *
 from fasthtml.components import NotStr
-from utils import fetch_trending_anime, anime_info
+from utils import fetch_trending_anime, anime_info, fetch_anime_season
 from components import *
+import datetime
 
 # Inisialisasi aplikasi dengan header dan pengaturan lainnya
 app, rt = fast_app(
@@ -21,15 +22,18 @@ def home():
         "Home": "/",
         "About": "/about",
         "Contact": "/contact",
-        "Trending": "/trending",
+        "Trending": "/trending/1",
     }
     trending_animes = fetch_trending_anime(1)
+    this_season = fetch_anime_season(1, 12)
     return (
         Title("Anime"),
         Body(
             create_navbar(navbar_links),
             warning(),
             kumpulan_kartu("Trending Anime", trending_animes),
+            pemisah(),
+            kumpulan_kartu("This Season", this_season),
             pemisah(),
             footer(),
         ),
@@ -42,7 +46,7 @@ def anime_page(id: int):
         "Home": "/",
         "About": "/about",
         "Contact": "/contact",
-        "Trending": "/trending",
+        "Trending": "/trending/1",
     }
     anime_data = anime_info(id)
     return (
@@ -54,6 +58,27 @@ def anime_page(id: int):
                 Img(
                     src=anime_data["bannerImage"],
                     alt=f"banner of {anime_data['title']}",
+                    cls="w-screen object-cover",
+                ),
+                Div(
+                    Figure(
+                        Img(
+                            src=anime_data["coverImage"],
+                            alt="Album",
+                        )
+                    ),
+                    Div(
+                        H2(anime_data["title"], cls="card-title"),
+                        P(
+                            NotStr(anime_data["description"]),
+                        ),
+                        Div(
+                            # Button("Listen", cls="btn btn-primary"),
+                            # cls="card-actions justify-end",
+                        ),
+                        cls="card-body",
+                    ),
+                    cls="card lg:card-side bg-base-100 shadow-xl rounded-none",
                 ),
             ),
             footer(),
@@ -63,12 +88,42 @@ def anime_page(id: int):
 
 @app.get("/about")
 def about_page():
-    pass
+    navbar_links = {
+        "Home": "/",
+        "About": "/about",
+        "Contact": "/contact",
+        "Trending": "/trending/1",
+    }
+    trending_animes = fetch_trending_anime(1)
+    return (
+        Title("Anime | About"),
+        Body(
+            create_navbar(navbar_links),
+            warning(),
+            pemisah(),
+            footer(),
+        ),
+    )
 
 
 @app.get("/contact")
 def contact_page():
-    pass
+    navbar_links = {
+        "Home": "/",
+        "About": "/about",
+        "Contact": "/contact",
+        "Trending": "/trending/1",
+    }
+    trending_animes = fetch_trending_anime(1)
+    return (
+        Title("Anime | About"),
+        Body(
+            create_navbar(navbar_links),
+            warning(),
+            pemisah(),
+            footer(),
+        ),
+    )
 
 
 @app.get("/trending")
