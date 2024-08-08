@@ -1,6 +1,12 @@
 from fasthtml.common import *
 from fasthtml.components import NotStr
-from utils import fetch_trending_anime, anime_info, fetch_anime_season, fetch_movie
+from utils import (
+    fetch_trending_anime,
+    anime_info,
+    fetch_anime_season,
+    fetch_movie,
+    get_current_season,
+)
 from components import *
 import datetime
 
@@ -177,11 +183,15 @@ def this_season_page(page: int = 1):
     this_season = fetch_anime_season(page, 36)
     has_next_page = len(this_season) == 36
     return (
-        Title("Anime | Trending"),
+        Title(f"Anime | Season {get_current_season()}"),
         Body(
             create_navbar(navbar_links),
             warning(),
-            kumpulan_kartu("Season Ini", this_season, "/season-movies/1"),
+            kumpulan_kartu(
+                f"Anime Season {get_current_season()} {datetime.datetime.now().year}",
+                this_season,
+                "/season-movies/1",
+            ),
             pemisah(),
             page_navigation(page, has_next_page),
             footer(),
@@ -207,11 +217,15 @@ def this_season_movies(page: int = 1):
     has_next_page = len(this_season) == 36
 
     return (
-        Title("Anime | Trending"),
+        Title(f"Anime | Movies Season {get_current_season()}"),
         Body(
             create_navbar(navbar_links),
             warning(),
-            kumpulan_kartu("Movies Season Ini", this_season, "/season-movies/1"),
+            kumpulan_kartu(
+                f"Movies Season {get_current_season()} {datetime.datetime.now().year}",
+                this_season,
+                "/season-movies/1",
+            ),
             pemisah(),
             page_navigation(page, has_next_page),
             footer(),
