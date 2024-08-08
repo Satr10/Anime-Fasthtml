@@ -7,3 +7,4 @@ __pycache__/
 .env
 .sesskey
 test.py
+.vercel
