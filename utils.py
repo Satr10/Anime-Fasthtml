@@ -1,12 +1,11 @@
 import requests
-from typing import List, Dict, Any, Optional
 from datetime import datetime
 
 
 API_URL = "https://graphql.anilist.co"
 
 
-def fetch_trending_anime(page: int, limit: int = 12) -> List[Dict[str, Any]]:
+def fetch_trending_anime(page: int, limit: int = 12) -> str:
     query = f"""
     query {{
         Page(page: {page}, perPage: {limit}) {{
@@ -56,7 +55,7 @@ def fetch_trending_anime(page: int, limit: int = 12) -> List[Dict[str, Any]]:
     return animes
 
 
-def anime_info(id: int) -> Dict[str, Optional[Any]]:
+def anime_info(id: int) -> str:
     query = """
     query ($id: Int) {
         Media(id: $id) {
@@ -175,7 +174,7 @@ def fetch_anime_season(
     limit: int = 12,
     seasonYear: int = datetime.now().year,
     season: str = get_current_season(),
-) -> List[Dict[str, Any]]:
+) -> str:
     query = f"""
     query {{
         Page(page: {page}, perPage: {limit}) {{
@@ -230,7 +229,7 @@ def fetch_movie(
     limit: int = 12,
     seasonYear: int = datetime.now().year,
     season: str = get_current_season(),
-) -> List[Dict[str, Any]]:
+) -> str:
     query = f"""
     query {{
         Page(page: {page}, perPage: {limit}) {{
@@ -280,7 +279,7 @@ def fetch_movie(
     return animes
 
 
-def search_anime(query: str, page: int = 1, limit: int = 12) -> List[Dict[str, Any]]:
+def search_anime(query: str, page: int = 1, limit: int = 12) -> str:
     query = f"""
     query {{
         Page(page: {page}, perPage: {limit}) {{
