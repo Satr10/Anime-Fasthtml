@@ -1,4 +1,4 @@
-# Anime Dashboard
+# Anime Fasthtml
 
 Proyek ini adalah aplikasi web yang menyediakan informasi tentang anime yang sedang tren, anime musim saat ini, dan film anime. Aplikasi ini juga memungkinkan pengguna untuk mencari anime, melihat informasi detail tentang setiap anime, dan mengunduh episode.
 
