@@ -68,37 +68,47 @@ def anime_page(id: int):
                     alt=f"banner of {anime_data['title']}",
                     cls="w-screen object-cover",
                 ),
+                pemisah(),
                 Div(
-                    Img(
-                        src=anime_data["coverImage"],
-                        alt=f"Cover of {anime_data['title']}",
-                    )
+                    Div(
+                        Img(
+                            src=anime_data["coverImage"],
+                            alt=f"Cover of {anime_data['title']}",
+                        )
+                    ),
+                    Div(
+                        H1(anime_data["title"]),
+                        P(f"Rating: {anime_data['score']}/10"),
+                        P(f"Episodes: {anime_data['episodes']}"),
+                        P(f"Season: {anime_data['season']}"),
+                        P(f"Genres: {', '.join(anime_data['genres'])}"),
+                        P(f"Duration: {anime_data['duration']}"),
+                        P(f"Rating: {anime_data['score']}/100"),
+                        (
+                            P(f"Start Date: {anime_data['startDate']}")
+                            if anime_data["startDate"]
+                            else None
+                        ),
+                        (
+                            P(f"End Date: {anime_data['endDate']}")
+                            if anime_data["endDate"]
+                            else None
+                        ),
+                        (
+                            P(f"Studio: {anime_data['studio']}")
+                            if anime_data["studio"]
+                            else None
+                        ),
+                    ),
+                    cls="flex flex-row items-center gap-4",
                 ),
+                pemisah(),
                 Div(
-                    H1(anime_data["title"]),
                     P(NotStr(anime_data["description"])),
-                    P(f"Rating: {anime_data['score']}/10"),
-                    P(f"Episodes: {anime_data['episodes']}"),
-                    P(f"Season: {anime_data['season']}"),
-                    P(f"Genres: {', '.join(anime_data['genres'])}"),
-                    P(f"Duration: {anime_data['duration']}"),
-                    P(f"Rating: {anime_data['score']}/10"),
-                    (
-                        P(f"Start Date: {anime_data['startDate']}")
-                        if anime_data["startDate"]
-                        else None
-                    ),
-                    (
-                        P(f"End Date: {anime_data['endDate']}")
-                        if anime_data["endDate"]
-                        else None
-                    ),
-                    (
-                        P(f"Studio: {anime_data['studio']}")
-                        if anime_data["studio"]
-                        else None
-                    ),
                 ),
+                pemisah(),
+                Div(H2("Episodes")),
+                pemisah(),
             ),
             footer(),
         ),
