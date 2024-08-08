@@ -118,7 +118,6 @@ def anime_page(id: int):
 @app.get("/about")
 def about_page():
     navbar_links = COMMON_NAVBAR_LINKS
-    trending_animes = fetch_trending_anime(1)
     return (
         Title("Anime | About"),
         Body(
@@ -133,7 +132,6 @@ def about_page():
 @app.get("/contact")
 def contact_page():
     navbar_links = COMMON_NAVBAR_LINKS
-    trending_animes = fetch_trending_anime(1)
     return (
         Title("Anime | About"),
         Body(
