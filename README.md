@@ -12,10 +12,10 @@ Proyek ini adalah aplikasi web yang menyediakan informasi tentang anime yang sed
 
 ## Technologies Used
 
-Python: The primary programming language used for the backend.
-FastHTML: A lightweight and fast web framework for building dynamic web pages in Python.
-Tailwind CSS: A utility-first CSS framework used for styling the web pages.
-Theme-Change: A JavaScript library used for theme switching functionality.
+- **Python**: The primary programming language used for the backend.
+- **FastHTML**: A lightweight and fast web framework for building dynamic web pages in Python.
+- **Tailwind CSS**: A utility-first CSS framework used for styling the web pages.
+- **Theme-Change**: A JavaScript library used for theme switching functionality.
 
 ## Instalasi
 
