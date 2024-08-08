@@ -6,10 +6,6 @@ from datetime import datetime
 API_URL = "https://graphql.anilist.co"
 
 
-import requests
-from typing import List, Dict, Any
-
-
 def fetch_trending_anime(page: int, limit: int = 12) -> List[Dict[str, Any]]:
     query = f"""
     query {{
@@ -284,7 +280,56 @@ def fetch_movie(
     return animes
 
 
+def search_anime(query: str, page: int = 1, limit: int = 12) -> List[Dict[str, Any]]:
+    query = f"""
+    query {{
+        Page(page: {page}, perPage: {limit}) {{
+            media(search: "{query}", sort: TRENDING_DESC, type: ANIME) {{
+                id
+                title {{
+                    romaji
+                    english
+                }}
+                trending
+                averageScore
+                coverImage {{
+                    large
+                }}
+            }}
+        }}
+    }}
+    """
+    response = requests.post(API_URL, json={"query": query})
+    if response.status_code != 200:
+        print(f"HTTP Error: {response.status_code}")
+        print(response.text)
+        return []
+
+    data = response.json()
+    if "errors" in data:
+        print(f"GraphQL Errors: {data['errors']}")
+        return []
+
+    animes = []
+    for anime in data.get("data", {}).get("Page", {}).get("media", []):
+        title = anime.get("title", {}).get("romaji", "Unknown Title")
+        cover_image = anime.get("coverImage", {}).get("large", "No Image Available")
+        average_score = anime.get("averageScore")
+        rating = (
+            (average_score // 20) if average_score is not None else None
+        )  # Convert averageScore to stars (0-5)
+
+        anime_info = {
+            "judul": title,
+            "rating": rating,
+            "gambar": cover_image,
+            "id": anime.get("id", "Unknown ID"),
+        }
+        animes.append(anime_info)
+
+    return animes
+
+
 if __name__ == "__main__":
-    data = fetch_movie()
-    for anime in data:
-        print(anime)
+    data = search_anime("one")
+    print(data)

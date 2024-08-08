@@ -1,7 +1,7 @@
 from fasthtml.common import *
 
 
-def create_navbar(links):
+def create_navbar(links, query: str = ""):
     # links adalah dictionary dengan format: {"text": "url"}
 
     # Fungsi helper untuk membuat list item
@@ -51,10 +51,16 @@ def create_navbar(links):
         ),
         # Navbar End (Button)
         Div(
-            Input(
-                type="text",
-                placeholder="Type here",
-                cls="input input-bordered w-full max-w-xs",
+            Form(
+                Input(
+                    type="text",
+                    placeholder="Cari...",
+                    cls="input input-bordered w-full max-w-xs",
+                    name="query",
+                    value=query,
+                ),
+                method="get",
+                action="/search",
             ),
             cls="navbar-end",
         ),
@@ -139,24 +145,24 @@ def footer():
     )
 
 
-def page_navigation(current_page: int = 1, has_next_page: bool = False):
+def page_navigation(current_page: int = 1, has_next_page: bool = False, path: str = ""):
     prev_page = current_page - 1 if current_page > 1 else 1
     next_page = current_page + 1 if has_next_page else current_page
     return Div(
         Div(
             A(
                 "«",
-                href=f"/trending/{prev_page}",
+                href=f"/{path}/{prev_page}",
                 cls="join-item btn",
             ),
             A(
                 f"Page {current_page}",
-                href=f"/trending/{current_page}",
+                href=f"/{path}/{current_page}",
                 cls="join-item btn",
             ),
             A(
                 "»",
-                href=f"/trending/{next_page}",
+                href=f"/{path}/{next_page}",
                 cls="join-item btn",
                 disabled=not has_next_page,
             ),

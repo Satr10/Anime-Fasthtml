@@ -6,9 +6,17 @@ from utils import (
     fetch_anime_season,
     fetch_movie,
     get_current_season,
+    search_anime,
 )
 from components import *
 import datetime
+
+COMMON_NAVBAR_LINKS = {
+    "Home": "/",
+    "About": "/about",
+    "Contact": "/contact",
+    "Trending": "/trending/1",
+}
 
 # Inisialisasi aplikasi dengan header dan pengaturan lainnya
 app, rt = fast_app(
@@ -24,12 +32,7 @@ app, rt = fast_app(
 
 @app.get("/")
 def home():
-    navbar_links = {
-        "Home": "/",
-        "About": "/about",
-        "Contact": "/contact",
-        "Trending": "/trending/1",
-    }
+    navbar_links = COMMON_NAVBAR_LINKS
     trending_animes = fetch_trending_anime(1)
     this_season = fetch_anime_season(1, 12)
     this_season_movies = fetch_movie(1, 12)
@@ -53,12 +56,7 @@ def home():
 
 @app.get("/anime/{id}")
 def anime_page(id: int):
-    navbar_links = {
-        "Home": "/",
-        "About": "/about",
-        "Contact": "/contact",
-        "Trending": "/trending/1",
-    }
+    navbar_links = COMMON_NAVBAR_LINKS
     anime_data = anime_info(id)
     return (
         Title(f"Anime | {anime_data['title']}"),
@@ -99,12 +97,7 @@ def anime_page(id: int):
 
 @app.get("/about")
 def about_page():
-    navbar_links = {
-        "Home": "/",
-        "About": "/about",
-        "Contact": "/contact",
-        "Trending": "/trending/1",
-    }
+    navbar_links = COMMON_NAVBAR_LINKS
     trending_animes = fetch_trending_anime(1)
     return (
         Title("Anime | About"),
@@ -119,12 +112,7 @@ def about_page():
 
 @app.get("/contact")
 def contact_page():
-    navbar_links = {
-        "Home": "/",
-        "About": "/about",
-        "Contact": "/contact",
-        "Trending": "/trending/1",
-    }
+    navbar_links = COMMON_NAVBAR_LINKS
     trending_animes = fetch_trending_anime(1)
     return (
         Title("Anime | About"),
@@ -160,7 +148,7 @@ def trending_page(page: int = 1):
             warning(),
             kumpulan_kartu("Trending Anime", trending_animes, "/trending/1"),
             pemisah(),
-            page_navigation(page, has_next_page),
+            page_navigation(page, has_next_page, "trending"),
             footer(),
         ),
     )
@@ -193,7 +181,7 @@ def this_season_page(page: int = 1):
                 "/season-movies/1",
             ),
             pemisah(),
-            page_navigation(page, has_next_page),
+            page_navigation(page, has_next_page, "this-season"),
             footer(),
         ),
     )
@@ -227,10 +215,39 @@ def this_season_movies(page: int = 1):
                 "/season-movies/1",
             ),
             pemisah(),
-            page_navigation(page, has_next_page),
+            page_navigation(page, has_next_page, "season-movies"),
             footer(),
         ),
     )
+
+
+@app.get("/search/{query:str}/{page:int}")
+def search_page(query: str, page: int = 1):
+    navbar_links = COMMON_NAVBAR_LINKS
+    search_results = search_anime(query, page=page, limit=36)
+    has_next_page = len(search_results) == 36
+    return (
+        Title(f"Anime | Search: {query}"),
+        Body(
+            create_navbar(navbar_links, query=query),
+            warning(),
+            kumpulan_kartu(
+                f"Search Results for '{query}'", search_results, f"/search/{query}/1"
+            ),
+            pemisah(),
+            page_navigation(
+                page,
+                has_next_page,
+                f"search/{query}",
+            ),
+            footer(),
+        ),
+    )
+
+
+@app.get("/search")
+def search(query: str = Form(...)):
+    return RedirectResponse(url=f"/search/{query}/1")
 
 
 @app.exception_handler(HTTPException)
