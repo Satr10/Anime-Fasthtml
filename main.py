@@ -13,15 +13,14 @@ import datetime
 
 COMMON_NAVBAR_LINKS = {
     "Home": "/",
-    "About": "/about",
-    "Contact": "/contact",
+    "Tentang": "/about",
+    "Kontak": "/contact",
     "Trending": "/trending/1",
 }
 
 # Inisialisasi aplikasi dengan header dan pengaturan lainnya
 app, rt = fast_app(
     hdrs=(
-        NotStr("<title>Anime</title>"),
         Link(href="/static/styles/tailwind.css", rel="stylesheet"),
         Script(src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"),
     ),
