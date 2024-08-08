@@ -132,7 +132,7 @@ def pemisah():
 
 def footer():
     return Footer(
-        Aside(P("Copyright © 2024 - All right reserved by ACME Industries Ltd")),
+        Aside(P("Copyright © 2024 - Satrio")),
         cls="footer footer-center bg-base-300 text-base-content p-4",
     )
 
