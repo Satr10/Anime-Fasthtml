@@ -10,7 +10,7 @@ from utils import (
 )
 from components import *
 import datetime
-
+from collections import defaultdict
 from get_download import cari_anime, get_episode, get_download
 
 COMMON_NAVBAR_LINKS = {
@@ -28,6 +28,7 @@ app, rt = fast_app(
     ),
     pico=False,
     live=True,
+    debug=True,
 )
 
 
@@ -116,14 +117,46 @@ def anime_page(id: int):
                     H2("Download"),
                     *[
                         Div(
-                            create_button_with_links(f"{link['Judul']}", f"/download/{link["Slug"]}"),
+                            Button(
+                                f"{link['Judul']}",
+                                hx_get=f"/get-episodes/{link['Slug']}",
+                                hx_swap="outerHTML",
+                                hx_target="#episodes-selection",
+                                cls="btn btn-primary",
+                            ),
                         )
                         for link in list_pencarian
                     ],
+                    id="episodes-selection",
                 ),  # lanjutkan
                 pemisah(),
             ),
             footer(),
+        ),
+    )
+
+
+@app.get("/get-episodes/{slug}")
+def get_episodes_page(slug: str):
+    episodes = get_episode(slug)
+    print(episodes)
+    return (
+        Div(
+            H2("Episodes"),
+            Button("back", cls="btn btn-primary"),
+            *[
+                Div(
+                    Button(
+                        f"Episode {episode['Episode']}",
+                        hx_get=f"/download/{episode['Slug']}",
+                        hx_swap="outerHTML",
+                        hx_target="#episodes-selection",
+                        cls="btn btn-primary",
+                    )
+                )
+                for episode in episodes
+            ],
+            id="episodes-selection",
         ),
     )
 
@@ -158,34 +191,35 @@ def contact_page():
 
 @app.get("/download/{slug}")
 def download_page(slug: str):
-    navbar_links = COMMON_NAVBAR_LINKS
-    episodes = get_episode(slug)
-    
-    # Mengumpulkan semua link download untuk setiap episode
-    all_download_links = []
-    for episode in episodes:
-        episode_slug = episode["Slug"]
-        download_links = get_download(episode_slug)
-        all_download_links.extend(download_links)
-    
-    return (
-        Title(f"Anime | Downloads for {slug}"),
-        Body(
-            create_navbar(navbar_links),
-            warning(),
-            pemisah(),Div(
-            *[
-                create_button_with_links(
-                    f"{link['Episode'].replace('Subtitle Indonesia', '')} {link['Resolution']} {link['Format']} {link['Provider']}",
-                    link['URL']
-                )
-                for link in all_download_links
-            ], cls="flex flex-row flex-wrap gap-4"),
-            pemisah(),
-            footer(),
-        ),
-    )
+    downloads = get_download(slug)
 
+    # Mengelompokkan unduhan berdasarkan provider
+    grouped_downloads = defaultdict(list)
+    for download in downloads:
+        grouped_downloads[download["Provider"]].append(download)
+
+    return Div(
+        *[
+            Div(
+                H3(provider, cls="text-xl font-bold mb-2 text-center"),
+                Div(
+                    *[
+                        A(
+                            f"Download {download['Episode'].replace('Subtitle Indonesia', '')}, {download['Format']}, {download['Resolution']}",
+                            href=f"{download['URL']}",
+                            target="_blank",
+                            cls="btn btn-primary mb-2 mr-2",
+                        )
+                        for download in provider_downloads
+                    ],
+                    cls="flex gap-4 flex-row flex-wrap justify-center items-center",
+                ),
+                cls="mb-6",
+            )
+            for provider, provider_downloads in grouped_downloads.items()
+        ],
+        cls="flex flex-col gap-4 justify-center items-center",
+    )
 
 
 @app.get("/trending")

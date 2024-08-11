@@ -170,7 +170,3 @@ def page_navigation(current_page: int = 1, has_next_page: bool = False, path: st
         ),
         cls="flex justify-center",
     )
-
-
-def create_button_with_links(Name: str, links: str):
-    return A(f"{Name}", href=f"{links}", cls="btn btn-primary")

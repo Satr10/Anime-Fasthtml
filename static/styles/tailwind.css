@@ -791,6 +791,40 @@ html {
   --tw-contain-style:  ;
 }
 
+.container {
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
 .alert {
   display: grid;
   width: 100%;
@@ -1418,6 +1452,48 @@ html {
   width: 1.5rem;
   background-color: var(--fallback-bc,oklch(var(--bc)/var(--tw-bg-opacity)));
   --tw-bg-opacity: 1;
+}
+
+.swap {
+  position: relative;
+  display: inline-grid;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  place-content: center;
+  cursor: pointer;
+}
+
+.swap > * {
+  grid-column-start: 1;
+  grid-row-start: 1;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-property: transform, opacity;
+}
+
+.swap input {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+}
+
+.swap .swap-on,
+.swap .swap-indeterminate,
+.swap input:indeterminate ~ .swap-on {
+  opacity: 0;
+}
+
+.swap input:checked ~ .swap-off,
+.swap-active .swap-off,
+.swap input:indeterminate ~ .swap-off {
+  opacity: 0;
+}
+
+.swap input:checked ~ .swap-on,
+.swap-active .swap-on,
+.swap input:indeterminate ~ .swap-indeterminate {
+  opacity: 1;
 }
 
 .badge-primary {
@@ -2216,6 +2292,18 @@ html {
   margin-top: 0.75rem;
 }
 
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
 .line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
@@ -2307,6 +2395,10 @@ html {
   justify-content: center;
 }
 
+.gap-2 {
+  gap: 0.5rem;
+}
+
 .gap-4 {
   gap: 1rem;
 }
@@ -2356,12 +2448,21 @@ html {
   padding-right: 0.25rem;
 }
 
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 .pb-8 {
   padding-bottom: 2rem;
 }
 
 .pt-4 {
   padding-top: 1rem;
+}
+
+.text-center {
+  text-align: center;
 }
 
 .text-2xl {
@@ -2379,8 +2480,17 @@ html {
   line-height: 1.75rem;
 }
 
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
 .font-bold {
   font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
 }
 
 .text-base-content {
