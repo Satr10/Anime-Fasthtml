@@ -119,7 +119,11 @@ def anime_page(id: int):
                     P(NotStr(anime_data["description"])),
                 ),
                 pemisah(),
-                search_section(ambil_tiga_kata(anime_data["title"])),
+                search_section(
+                    ambil_tiga_kata(
+                        anime_data["title"].replace("[", "").replace("]", "")
+                    )  # Untuk menghilangkan tanda kurung, nanti ubah agar lebih rapi
+                ),
                 pemisah(),
             ),
             footer(),
