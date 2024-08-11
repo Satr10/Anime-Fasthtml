@@ -7,6 +7,7 @@ from utils import (
     fetch_movie,
     get_current_season,
     search_anime,
+    ambil_tiga_kata,
 )
 from components import *
 import datetime
@@ -23,8 +24,16 @@ COMMON_NAVBAR_LINKS = {
 # Inisialisasi aplikasi dengan header dan pengaturan lainnya
 app, rt = fast_app(
     hdrs=(
-        Link(href="/static/styles/tailwind.css", rel="stylesheet"),
-        Script(src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"),
+        # Link(href="/static/styles/styles.css", rel="stylesheet"),
+        # Link(href="/static/styles/tailwind.css", rel="stylesheet"),
+        # Script(src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"),
+        # hanya untuk development
+        Script(src="https://cdn.tailwindcss.com"),
+        Link(
+            href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css",
+            type="text/css",
+            rel="stylesheet",
+        ),
     ),
     pico=False,
     live=True,
@@ -60,9 +69,6 @@ def home():
 def anime_page(id: int):
     navbar_links = COMMON_NAVBAR_LINKS
     anime_data = anime_info(id)
-    list_pencarian = cari_anime(
-        anime_data["title"],
-    )
     return (
         Title(f"Anime | {anime_data['title']}"),
         Body(
@@ -113,25 +119,33 @@ def anime_page(id: int):
                     P(NotStr(anime_data["description"])),
                 ),
                 pemisah(),
-                Div(
-                    H2("Download"),
-                    *[
-                        Div(
-                            Button(
-                                f"{link['Judul']}",
-                                hx_get=f"/get-episodes/{link['Slug']}",
-                                hx_swap="outerHTML",
-                                hx_target="#episodes-selection",
-                                cls="btn btn-primary",
-                            ),
-                        )
-                        for link in list_pencarian
-                    ],
-                    id="episodes-selection",
-                ),  # lanjutkan
+                search_section(ambil_tiga_kata(anime_data["title"])),
                 pemisah(),
             ),
             footer(),
+        ),
+    )
+
+
+def search_section(query: str):
+    list_pencarian = cari_anime(query)
+    return (
+        Div(
+            H2("Download", cls="mb-2 text-2xl font-bold"),
+            *[
+                Div(
+                    Button(
+                        f"{link['Judul']}",
+                        hx_get=f"/get-episodes/{link['Slug']}",
+                        hx_swap="outerHTML",
+                        hx_target="#episodes-selection",
+                        cls="btn btn-primary",
+                    ),
+                )
+                for link in list_pencarian
+            ],
+            id="episodes-selection",
+            cls="flex flex-wrap flex-col gap-4 mx-auto justify-center items-center",
         ),
     )
 
@@ -142,21 +156,24 @@ def get_episodes_page(slug: str):
     print(episodes)
     return (
         Div(
-            H2("Episodes"),
-            Button("back", cls="btn btn-primary"),
-            *[
-                Div(
-                    Button(
-                        f"Episode {episode['Episode']}",
-                        hx_get=f"/download/{episode['Slug']}",
-                        hx_swap="outerHTML",
-                        hx_target="#episodes-selection",
-                        cls="btn btn-primary",
+            H2("Episodes", cls="mb-2 text-2xl font-bold"),
+            Div(
+                *[
+                    Div(
+                        Button(
+                            f"Episode {episode['Episode']}",
+                            hx_get=f"/download/{episode['Slug']}",
+                            hx_swap="outerHTML",
+                            hx_target="#episodes-selection",
+                            cls="btn btn-primary",
+                        ),
                     )
-                )
-                for episode in episodes
-            ],
+                    for episode in episodes
+                ],
+                cls="flex flex-wrap flex-row gap-4 mx-auto justify-center items-center",
+            ),
             id="episodes-selection",
+            cls="flex flex-wrap flex-col gap-4 mx-auto justify-center items-center",
         ),
     )
 
@@ -208,17 +225,17 @@ def download_page(slug: str):
                             f"Download {download['Episode'].replace('Subtitle Indonesia', '')}, {download['Format']}, {download['Resolution']}",
                             href=f"{download['URL']}",
                             target="_blank",
-                            cls="btn btn-primary mb-2 mr-2",
+                            cls="btn btn-primary min-w-96 flex-1",
                         )
                         for download in provider_downloads
                     ],
-                    cls="flex gap-4 flex-row flex-wrap justify-center items-center",
+                    cls="flex gap-4 flex-row flex-wrap",
                 ),
-                cls="mb-6",
+                cls="mb-4",
             )
             for provider, provider_downloads in grouped_downloads.items()
         ],
-        cls="flex flex-col gap-4 justify-center items-center",
+        cls="m-4",
     )
 
 
