@@ -165,7 +165,7 @@ def get_episodes_page(slug: str):
                             hx_get=f"/download/{episode['Slug']}",
                             hx_swap="outerHTML",
                             hx_target="#episodes-selection",
-                            cls="btn btn-primary",
+                            cls="btn btn-primary flex-1",
                         ),
                     )
                     for episode in episodes
