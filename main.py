@@ -24,16 +24,16 @@ COMMON_NAVBAR_LINKS = {
 # Inisialisasi aplikasi dengan header dan pengaturan lainnya
 app, rt = fast_app(
     hdrs=(
-        # Link(href="/static/styles/styles.css", rel="stylesheet"),
-        # Link(href="/static/styles/tailwind.css", rel="stylesheet"),
-        # Script(src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"),
+        Link(href="/static/styles/styles.css", rel="stylesheet"),
+        Link(href="/static/styles/tailwind.css", rel="stylesheet"),
+        Script(src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"),
         # hanya untuk development
-        Script(src="https://cdn.tailwindcss.com"),
-        Link(
-            href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css",
-            type="text/css",
-            rel="stylesheet",
-        ),
+        # Script(src="https://cdn.tailwindcss.com"),
+        # Link(
+        #     href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css",
+        #     type="text/css",
+        #     rel="stylesheet",
+        # ),
     ),
     pico=False,
     live=True,
@@ -170,7 +170,7 @@ def get_episodes_page(slug: str):
                     )
                     for episode in episodes
                 ],
-                cls="flex flex-wrap flex-row gap-4 mx-auto justify-center items-center",
+                cls="flex flex-wrap flex-col gap-2 mx-auto justify-center items-center",
             ),
             id="episodes-selection",
             cls="flex flex-wrap flex-col gap-4 mx-auto justify-center items-center",
