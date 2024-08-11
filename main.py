@@ -7,10 +7,11 @@ from utils import (
     fetch_movie,
     get_current_season,
     search_anime,
+    ambil_tiga_kata,
 )
 from components import *
 import datetime
-
+from collections import defaultdict
 from get_download import cari_anime, get_episode, get_download
 
 COMMON_NAVBAR_LINKS = {
@@ -23,11 +24,20 @@ COMMON_NAVBAR_LINKS = {
 # Inisialisasi aplikasi dengan header dan pengaturan lainnya
 app, rt = fast_app(
     hdrs=(
+        Link(href="/static/styles/styles.css", rel="stylesheet"),
         Link(href="/static/styles/tailwind.css", rel="stylesheet"),
         Script(src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"),
+        # hanya untuk development
+        # Script(src="https://cdn.tailwindcss.com"),
+        # Link(
+        #     href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css",
+        #     type="text/css",
+        #     rel="stylesheet",
+        # ),
     ),
     pico=False,
     live=True,
+    debug=True,
 )
 
 
@@ -59,9 +69,6 @@ def home():
 def anime_page(id: int):
     navbar_links = COMMON_NAVBAR_LINKS
     anime_data = anime_info(id)
-    list_pencarian = cari_anime(
-        anime_data["title"],
-    )
     return (
         Title(f"Anime | {anime_data['title']}"),
         Body(
@@ -112,18 +119,61 @@ def anime_page(id: int):
                     P(NotStr(anime_data["description"])),
                 ),
                 pemisah(),
-                Div(
-                    H2("Download"),
-                    *[
-                        Div(
-                            create_button_with_links(f"{link['Judul']}", f"/download/{link["Slug"]}"),
-                        )
-                        for link in list_pencarian
-                    ],
-                ),  # lanjutkan
+                search_section(ambil_tiga_kata(anime_data["title"])),
                 pemisah(),
             ),
             footer(),
+        ),
+    )
+
+
+def search_section(query: str):
+    list_pencarian = cari_anime(query)
+    return (
+        Div(
+            H2("Download", cls="mb-2 text-2xl font-bold"),
+            *[
+                Div(
+                    Button(
+                        f"{link['Judul']}",
+                        hx_get=f"/get-episodes/{link['Slug']}",
+                        hx_swap="outerHTML",
+                        hx_target="#episodes-selection",
+                        cls="btn btn-primary",
+                    ),
+                )
+                for link in list_pencarian
+            ],
+            id="episodes-selection",
+            cls="flex flex-wrap flex-col gap-4 mx-auto justify-center items-center",
+        ),
+    )
+
+
+@app.get("/get-episodes/{slug}")
+def get_episodes_page(slug: str):
+    episodes = get_episode(slug)
+    print(episodes)
+    return (
+        Div(
+            H2("Episodes", cls="mb-2 text-2xl font-bold"),
+            Div(
+                *[
+                    Div(
+                        Button(
+                            f"Episode {episode['Episode']}",
+                            hx_get=f"/download/{episode['Slug']}",
+                            hx_swap="outerHTML",
+                            hx_target="#episodes-selection",
+                            cls="btn btn-primary flex-1",
+                        ),
+                    )
+                    for episode in episodes
+                ],
+                cls="flex flex-wrap flex-col gap-2 mx-auto justify-center items-center",
+            ),
+            id="episodes-selection",
+            cls="flex flex-wrap flex-col gap-4 mx-auto justify-center items-center",
         ),
     )
 
@@ -158,34 +208,35 @@ def contact_page():
 
 @app.get("/download/{slug}")
 def download_page(slug: str):
-    navbar_links = COMMON_NAVBAR_LINKS
-    episodes = get_episode(slug)
-    
-    # Mengumpulkan semua link download untuk setiap episode
-    all_download_links = []
-    for episode in episodes:
-        episode_slug = episode["Slug"]
-        download_links = get_download(episode_slug)
-        all_download_links.extend(download_links)
-    
-    return (
-        Title(f"Anime | Downloads for {slug}"),
-        Body(
-            create_navbar(navbar_links),
-            warning(),
-            pemisah(),Div(
-            *[
-                create_button_with_links(
-                    f"{link['Episode'].replace('Subtitle Indonesia', '')} {link['Resolution']} {link['Format']} {link['Provider']}",
-                    link['URL']
-                )
-                for link in all_download_links
-            ], cls="flex flex-row flex-wrap gap-4"),
-            pemisah(),
-            footer(),
-        ),
-    )
+    downloads = get_download(slug)
 
+    # Mengelompokkan unduhan berdasarkan provider
+    grouped_downloads = defaultdict(list)
+    for download in downloads:
+        grouped_downloads[download["Provider"]].append(download)
+
+    return Div(
+        *[
+            Div(
+                H3(provider, cls="text-xl font-bold mb-2 text-center"),
+                Div(
+                    *[
+                        A(
+                            f"Download {download['Episode'].replace('Subtitle Indonesia', '')}, {download['Format']}, {download['Resolution']}",
+                            href=f"{download['URL']}",
+                            target="_blank",
+                            cls="btn btn-primary min-w-96 flex-1",
+                        )
+                        for download in provider_downloads
+                    ],
+                    cls="flex gap-4 flex-row flex-wrap",
+                ),
+                cls="mb-4",
+            )
+            for provider, provider_downloads in grouped_downloads.items()
+        ],
+        cls="m-4",
+    )
 
 
 @app.get("/trending")

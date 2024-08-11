@@ -43,6 +43,10 @@ def get_episode(slug: str):
     ]
 
 
+def get_batch_downloads(slugs: str):
+    pass
+
+
 def get_download(slug: str):
     data = request_json(f"{API_LINK}/episode/{slug}")
     if "Error" in data:

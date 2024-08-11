@@ -3,7 +3,7 @@ module.exports = {
   daisyui: {
     themes: ["light", "dark", "cupcake"],
   },
-  content: ["./*.py"],
+  content: ["*.py"],
   theme: {
     extend: {},
   },

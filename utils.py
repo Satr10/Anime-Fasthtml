@@ -329,6 +329,11 @@ def search_anime(query: str, page: int = 1, limit: int = 12) -> str:
     return animes
 
 
+def ambil_tiga_kata(teks):
+    kata = teks.split()
+    return " ".join(kata[:3])
+
+
 if __name__ == "__main__":
     data = search_anime("one")
     print(data)

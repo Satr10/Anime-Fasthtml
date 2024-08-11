@@ -103,7 +103,7 @@ def kartu(judul: str, rating: int, gambar: str, id: int):
             Img(
                 src=gambar,
                 alt=f"Cover of {judul}",
-                cls="sm:h-80 sm:w-56 w-auto h-56 object-cover",
+                cls="sm:h-80 sm:w-56 w-auto h-64 object-cover",
             )
         ),
         Div(
@@ -112,7 +112,7 @@ def kartu(judul: str, rating: int, gambar: str, id: int):
                 href=f"/anime/{id}",
             ),
             Span(star_rating, cls="badge badge-primary"),
-            cls="card-body sm:w-56 sm:h-32 w-28 h-24",
+            cls="card-body sm:w-56 sm:h-32 w-44 h-24",
         ),
         cls="card card-compact bg-base-100 shadow-xl tooltip",
         # data_tip=judul,
@@ -170,7 +170,3 @@ def page_navigation(current_page: int = 1, has_next_page: bool = False, path: st
         ),
         cls="flex justify-center",
     )
-
-
-def create_button_with_links(Name: str, links: str):
-    return A(f"{Name}", href=f"{links}", cls="btn btn-primary")
