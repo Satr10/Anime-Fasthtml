@@ -1,4 +1,4 @@
-# Anime Dashboard
+# Anime Fasthtml
 
 Proyek ini adalah aplikasi web yang menyediakan informasi tentang anime yang sedang tren, anime musim saat ini, dan film anime. Aplikasi ini juga memungkinkan pengguna untuk mencari anime, melihat informasi detail tentang setiap anime, dan mengunduh episode.
 
@@ -9,6 +9,14 @@ Proyek ini adalah aplikasi web yang menyediakan informasi tentang anime yang sed
 - **Pencarian**: Mencari anime berdasarkan judul dan melihat hasil pencarian.
 - **Unduh**: Menyediakan tautan unduhan untuk episode anime.
 - **Navigasi**: Navigasi sederhana dengan tautan ke halaman Beranda, Tentang, Kontak, dan Trending.
+
+## Technologies Used
+
+- **Python**: The primary programming language used for the backend.
+- **FastHTML**: A lightweight and fast web framework for building dynamic web pages in Python.
+- **Tailwind CSS**: A utility-first CSS framework used for styling the web pages.
+- **Theme-Change**: A JavaScript library used for theme switching functionality.
+- **[Otakudesu-Scraper](https://github.com/rzkfyn/otakudesu-scraper)**: An UNOFFICIAL rest API for otakudesu. Otakudesu is a web that provides anime with Indonesian subtitle.  
 
 ## Instalasi
 
