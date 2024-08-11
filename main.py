@@ -153,7 +153,6 @@ def search_section(query: str):
 @app.get("/get-episodes/{slug}")
 def get_episodes_page(slug: str):
     episodes = get_episode(slug)
-    print(episodes)
     return (
         Div(
             H2("Episodes", cls="mb-2 text-2xl font-bold"),
