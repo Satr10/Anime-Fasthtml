@@ -224,6 +224,7 @@ def download_page(slug: str):
                             f"Download {download['Episode'].replace('Subtitle Indonesia', '')}, {download['Format']}, {download['Resolution']}",
                             href=f"{download['URL']}",
                             target="_blank",
+                            rel="noopener noreferrer",
                             cls="btn btn-primary min-w-96 flex-1",
                         )
                         for download in provider_downloads
