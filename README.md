@@ -82,8 +82,8 @@ Proyek ini adalah aplikasi web yang menyediakan informasi tentang anime yang sed
 
 ## TODO
 
-- **Bug Fix**: Perbaiki masalah saat judul anime terlalu panjang pada query pencarian yang menyebabkan error.
-- **Mempercepat Kode**: Sekarang kecepatan fetch nya lambat sekali.
+- ~~**Bug Fix**: Perbaiki masalah saat judul anime terlalu panjang pada query pencarian yang menyebabkan error.~~
+- ~~**Mempercepat Kode**: Sekarang kecepatan fetch nya lambat sekali.~~
 - **UI Improvements**: Tingkatkan antarmuka pengguna agar lebih responsif dan menarik.
 - **Streaming Functionality**: Tambahkan fitur untuk streaming anime secara langsung dari aplikasi.
 - **Enhance Search Function**: Tambahkan fitur pencarian lanjutan dengan filter berdasarkan genre, tahun, dan studio.
