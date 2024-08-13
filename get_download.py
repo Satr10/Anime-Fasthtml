@@ -1,9 +1,6 @@
 import requests
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 API_LINK = "https://otakudesu-unofficial-api.vercel.app/v1"
-
-# Gunakan requests.Session untuk mengurangi overhead dari pembuatan koneksi
 
 
 def ambil_dua_kata(teks):
@@ -31,7 +28,6 @@ def cari_anime(query: str):
     print(f"Searching with three words: {query_tiga_kata}")
     data = request_json(f"{API_LINK}/search/{query_tiga_kata}")
 
-    # Jika hasil kosong, coba dengan dua kata
     if not data.get("data"):
         query_dua_kata = ambil_dua_kata(query).replace(" ", "%20")
         print(f"No results found, searching with two words: {query_dua_kata}")
@@ -94,16 +90,12 @@ def main():
     slugs = [episode["Slug"] for episode in episodes]
 
     urls = []
-    with ThreadPoolExecutor() as executor:
-        future_to_slug = {executor.submit(get_download, slug): slug for slug in slugs}
-        for future in as_completed(future_to_slug):
-            data = future.result()
-            for item in data:
-                urls.append(item)
+    for slug in slugs:
+        data = get_download(slug)
+        urls.extend(data)
 
     print(urls)
 
 
-# Example usage
 if __name__ == "__main__":
     main()
