@@ -393,6 +393,9 @@ def this_season_movies(page: int = 1):
     )
 
 
+# search tidak berfungsi di vercel
+
+
 @app.get("/search/{query:str}/{page:int}")
 def search_page(query: str, page: int = 1):
     navbar_links = COMMON_NAVBAR_LINKS
