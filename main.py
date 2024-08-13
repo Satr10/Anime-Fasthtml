@@ -12,8 +12,6 @@ from components import *
 import datetime
 from collections import defaultdict
 from get_download import cari_anime, get_episode, get_download
-from urllib.parse import quote
-
 
 COMMON_NAVBAR_LINKS = {
     "Home": "/",
@@ -400,25 +398,24 @@ def this_season_movies(page: int = 1):
 
 @app.get("/search/{query:str}/{page:int}")
 def search_page(query: str, page: int = 1):
-    encoded_query = quote(query)
     navbar_links = COMMON_NAVBAR_LINKS
     search_results = search_anime(query, page=page, limit=36)
     has_next_page = len(search_results) == 36
     return (
-        Title(f"Anime | Search: {encoded_query}"),
+        Title(f"Anime | Search: {query}"),
         Body(
-            create_navbar(navbar_links, query=encoded_query),
+            create_navbar(navbar_links, query=query),
             warning(),
             kumpulan_kartu(
-                f"Search Results for '{encoded_query}'",
+                f"Search Results for '{query}'",
                 search_results,
-                f"/search/{encoded_query}/1",
+                f"/search/{query}/1",
             ),
             pemisah(),
             page_navigation(
                 page,
                 has_next_page,
-                f"search/{encoded_query}",
+                f"search/{query}",
             ),
             footer(),
         ),
