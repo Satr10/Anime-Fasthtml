@@ -27,7 +27,24 @@ app, rt = fast_app(
         Link(href="/static/styles/styles.css", rel="stylesheet"),
         Link(href="/static/styles/tailwind.css", rel="stylesheet"),
         Script(src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"),
-        Link(href="/static/images/favicon.ico", rel="icon", type="image/x-icon"),
+        Link(
+            rel="apple-touch-icon",
+            sizes="180x180",
+            href="/static/images/apple-touch-icon.png",
+        ),
+        Link(
+            rel="icon",
+            type="image/png",
+            sizes="32x32",
+            href="/static/images/favicon-32x32.png",
+        ),
+        Link(
+            rel="icon",
+            type="image/png",
+            sizes="16x16",
+            href="/static/images/favicon-16x16.png",
+        ),
+        Link(rel="manifest", href="/static/images/site.webmanifest"),
         # hanya untuk development
         # Script(src="https://cdn.tailwindcss.com"),
         # Link(
