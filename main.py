@@ -12,6 +12,7 @@ from components import *
 import datetime
 from collections import defaultdict
 from get_download import cari_anime, get_episode, get_download
+from urllib.parse import unquote
 
 COMMON_NAVBAR_LINKS = {
     "Home": "/",
@@ -401,6 +402,8 @@ def search_page(query: str, page: int = 1):
     navbar_links = COMMON_NAVBAR_LINKS
     search_results = search_anime(query, page=page, limit=36)
     has_next_page = len(search_results) == 36
+    query = unquote(query)
+
     print(query)
     return (
         Title(f"Anime | Search: {query}"),
