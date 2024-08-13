@@ -52,8 +52,8 @@ app, rt = fast_app(
         # ),
     ),
     pico=False,
-    live=True,
-    debug=True,
+    # live=True,
+    # debug=True,
 )
 
 
