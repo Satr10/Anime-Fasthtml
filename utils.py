@@ -279,11 +279,11 @@ def fetch_movie(
     return animes
 
 
-def search_anime(query: str, page: int = 1, limit: int = 12) -> str:
+def search_anime(title: str, page: int = 1, limit: int = 12) -> str:
     query = f"""
     query {{
         Page(page: {page}, perPage: {limit}) {{
-            media(search: "{query}", sort: TRENDING_DESC, type: ANIME) {{
+            media(search: "{title}", sort: TRENDING_DESC, type: ANIME) {{
                 id
                 title {{
                     romaji
@@ -327,6 +327,7 @@ def search_anime(query: str, page: int = 1, limit: int = 12) -> str:
         animes.append(anime_info)
 
     return animes
+
 
 if __name__ == "__main__":
     data = search_anime("one")
