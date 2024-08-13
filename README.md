@@ -16,7 +16,7 @@ Proyek ini adalah aplikasi web yang menyediakan informasi tentang anime yang sed
 - **FastHTML**: A lightweight and fast web framework for building dynamic web pages in Python.
 - **Tailwind CSS**: A utility-first CSS framework used for styling the web pages.
 - **Theme-Change**: A JavaScript library used for theme switching functionality.
-- **[Otakudesu-Scraper](https://github.com/rzkfyn/otakudesu-scraper)**: An UNOFFICIAL rest API for otakudesu. Otakudesu is a web that provides anime with Indonesian subtitle.  
+- **[Otakudesu-Scraper](https://github.com/rzkfyn/otakudesu-scraper)**: An UNOFFICIAL rest API for otakudesu. Otakudesu is a web that provides anime with Indonesian subtitle.
 
 ## Instalasi
 
@@ -84,6 +84,7 @@ Proyek ini adalah aplikasi web yang menyediakan informasi tentang anime yang sed
 
 - ~~**Bug Fix**: Perbaiki masalah saat judul anime terlalu panjang pada query pencarian yang menyebabkan error.~~
 - ~~**Mempercepat Kode**: Sekarang kecepatan fetch nya lambat sekali.~~
+- **Menambahkan Provider Dowwnload**:menambah daftar provider download untuk setiap episode dan menampilkan daftar download tersebut di halaman unduhan.
 - **UI Improvements**: Tingkatkan antarmuka pengguna agar lebih responsif dan menarik.
 - **Streaming Functionality**: Tambahkan fitur untuk streaming anime secara langsung dari aplikasi.
 - **Enhance Search Function**: Tambahkan fitur pencarian lanjutan dengan filter berdasarkan genre, tahun, dan studio.
