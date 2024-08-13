@@ -27,6 +27,7 @@ app, rt = fast_app(
         Link(href="/static/styles/styles.css", rel="stylesheet"),
         Link(href="/static/styles/tailwind.css", rel="stylesheet"),
         Script(src="https://cdn.jsdelivr.net/npm/theme-change@2.0.2/index.js"),
+        Link(href="/static/images/favicon.ico", rel="icon", type="image/x-icon"),
         # hanya untuk development
         # Script(src="https://cdn.tailwindcss.com"),
         # Link(
