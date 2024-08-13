@@ -44,7 +44,6 @@ app, rt = fast_app(
             sizes="16x16",
             href="/static/images/favicon-16x16.png",
         ),
-        Link(rel="manifest", href="/static/images/site.webmanifest"),
         # hanya untuk development
         # Script(src="https://cdn.tailwindcss.com"),
         # Link(
