@@ -151,13 +151,14 @@ def anime_page(id: int):
                     P(NotStr(anime_data["description"])),
                 ),
                 pemisah(),
-                Div(
-                    Span(cls="loading loading-spinner loading-lg"),
-                    id="search-section",
-                    hx_get=f"/load-search/{anime_data['title']}",
-                    hx_trigger="load",
-                    cls="mx-auto",
-                ),
+                # Div(
+                #     Span(cls="loading loading-spinner loading-lg"),
+                #     id="search-section",
+                #     hx_get=f"/load-search/{anime_data['title']}",
+                #     hx_trigger="load",
+                #     cls="mx-auto",
+                # ),
+                search_section(anime_data["title"]),
                 pemisah(),
             ),
             footer(),
@@ -415,11 +416,6 @@ def search_page(query: str, page: int = 1):
             footer(),
         ),
     )
-
-
-@app.get("/search")
-def search(query: str = Form(...)):
-    return RedirectResponse(url=f"/search/{query}/1")
 
 
 @app.exception_handler(HTTPException)
