@@ -153,20 +153,23 @@ def search_section(query: str):
     return (
         Div(
             H2("Download", cls="mb-2 text-2xl font-bold"),
-            *[
-                Div(
-                    Button(
-                        f"{link['Judul']}",
-                        hx_get=f"/get-episodes/{link['Slug']}",
-                        hx_swap="outerHTML",
-                        hx_target="#episodes-selection",
-                        cls="btn btn-primary",
-                    ),
-                )
-                for link in list_pencarian
-            ],
+            Div(
+                *[
+                    Div(
+                        Button(
+                            f"{link['Judul']}",
+                            hx_get=f"/get-episodes/{link['Slug']}",
+                            hx_swap="outerHTML",
+                            hx_target="#episodes-selection",
+                            cls="btn btn-primary sm:min-w-96",
+                        ),
+                    )
+                    for link in list_pencarian
+                ],
+                cls="flex flex-wrap flex-col gap-2 mx-auto justify-center items-center",
+            ),
             id="episodes-selection",
-            cls="flex flex-wrap flex-col gap-4 mx-auto justify-center items-center",
+            cls="flex flex-wrap flex-col gap-2 mx-4 mx-auto justify-center items-center",
         ),
     )
 
@@ -185,7 +188,7 @@ def get_episodes_page(slug: str):
                             hx_get=f"/download/{episode['Slug']}",
                             hx_swap="outerHTML",
                             hx_target="#episodes-selection",
-                            cls="btn btn-primary flex-1",
+                            cls="btn btn-primary",
                         ),
                     )
                     for episode in episodes
@@ -193,7 +196,7 @@ def get_episodes_page(slug: str):
                 cls="flex flex-wrap flex-col gap-2 mx-auto justify-center items-center",
             ),
             id="episodes-selection",
-            cls="flex flex-wrap flex-col gap-4 mx-auto justify-center items-center",
+            cls="flex flex-wrap flex-col gap-4 mx-4 justify-center items-center",
         ),
     )
 
@@ -220,7 +223,7 @@ def about_page():
                 ),
                 A(
                     "Source Code",
-                    href="https://github.com/rizkyrajith/anime-info-website",
+                    href="https://github.com/Satr10/Anime-fasthtml",
                     target="_blank",
                     rel="noopener noreferrer",
                     cls="link",
@@ -278,7 +281,7 @@ def download_page(slug: str):
                             href=f"{download['URL']}",
                             target="_blank",
                             rel="noopener noreferrer",
-                            cls="btn btn-primary min-w-96 flex-1",
+                            cls="btn btn-primary min-w-64 flex-1",
                         )
                         for download in provider_downloads
                     ],
