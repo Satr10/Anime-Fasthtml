@@ -53,6 +53,8 @@ app, rt = fast_app(
         # ),
     ),
     pico=False,
+    live=True,
+    debug=True,
 )
 
 
@@ -204,6 +206,27 @@ def about_page():
         Body(
             create_navbar(navbar_links),
             warning(),
+            Div(
+                H1("Tentang", cls="mb-2 text-2xl font-bold"),
+                P(
+                    "Ini adalah situs web untuk mencari dan mengunduh anime. Situs ini dibuat sebagai ",
+                    Span("proyek hobi", cls="font-semibold"),
+                    " oleh pengembang yang ingin belajar dan berbagi informasi tentang anime. ",
+                    "Kami menggunakan ",
+                    A("FastHTML,", href="https://fasth.ml/"),
+                    A("TailwindCSS,", href="https://tailwindcss.com/"),
+                    A("DaisyUI", href="https://daisyui.com/"),
+                    " untuk mengembangkan situs ini.",
+                ),
+                A(
+                    "Source Code",
+                    href="https://github.com/rizkyrajith/anime-info-website",
+                    target="_blank",
+                    rel="noopener noreferrer",
+                    cls="link",
+                ),
+                cls="prose bg-base-200 p-4 rounded-lg mt-4 mx-auto",
+            ),
             pemisah(),
             footer(),
         ),
@@ -218,6 +241,17 @@ def contact_page():
         Body(
             create_navbar(navbar_links),
             warning(),
+            Div(
+                H1("Contact", cls="mb-2 text-2xl font-bold"),
+                P(
+                    "Email: ",
+                    A(
+                        "personal.satrio@protonmal.com",
+                        href="mailto:personal.satrio@protonmal.com",
+                    ),
+                ),
+                cls="prose mx-auto",
+            ),
             pemisah(),
             footer(),
         ),
@@ -266,12 +300,7 @@ def redirect_to_trending_page():
 @app.get("/trending/{page:int}")
 def trending_page(page: int = 1):
     page = int(page)
-    navbar_links = {
-        "Home": "/",
-        "About": "/about",
-        "Contact": "/contact",
-        "Trending": "/trending",
-    }
+    navbar_links = COMMON_NAVBAR_LINKS
     trending_animes = fetch_trending_anime(page, 36)
     has_next_page = len(trending_animes) == 36
     return (
@@ -295,12 +324,7 @@ def redirect_to_trending_page():
 @app.get("/this-season/{page:int}")
 def this_season_page(page: int = 1):
     page = int(page)
-    navbar_links = {
-        "Home": "/",
-        "About": "/about",
-        "Contact": "/contact",
-        "Trending": "/trending",
-    }
+    navbar_links = COMMON_NAVBAR_LINKS
     this_season = fetch_anime_season(page, 36)
     has_next_page = len(this_season) == 36
     return (
@@ -328,12 +352,7 @@ def redirect_to_trending_page():
 @app.get("/season-movies/{page:int}")
 def this_season_movies(page: int = 1):
     page = int(page)
-    navbar_links = {
-        "Home": "/",
-        "About": "/about",
-        "Contact": "/contact",
-        "Trending": "/trending",
-    }
+    navbar_links = COMMON_NAVBAR_LINKS
     this_season = fetch_movie(page, 36)
     has_next_page = len(this_season) == 36
 
