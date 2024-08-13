@@ -418,6 +418,11 @@ def search_page(query: str, page: int = 1):
     )
 
 
+@app.get("/search")
+def search(query: str = Form(...)):
+    return RedirectResponse(url=f"/search/{query}/1")
+
+
 @app.exception_handler(HTTPException)
 def handler_404(request: Request, exc: HTTPException):
     return HTMLResponse(
