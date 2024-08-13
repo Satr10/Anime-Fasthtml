@@ -140,7 +140,18 @@ def pemisah():
 
 def footer():
     return Footer(
-        Aside(P("Copyright © 2024 - Satrio")),
+        Aside(
+            P(
+                f"Copyright © 2024 - Satrio - Made with ",
+                A(
+                    "FastHtml",
+                    href="https://fastht.ml/",
+                    target="_blank",
+                    rel="noopener noreferrer",
+                    cls="link",
+                ),
+            )
+        ),
         cls="footer footer-center bg-base-300 text-base-content p-4",
     )
 
