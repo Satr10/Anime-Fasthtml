@@ -60,25 +60,41 @@ app, rt = fast_app(
 @app.get("/")
 def home():
     navbar_links = COMMON_NAVBAR_LINKS
-    trending_animes = fetch_trending_anime(1)
-    this_season = fetch_anime_season(1, 12)
-    this_season_movies = fetch_movie(1, 12)
     return (
         Title("Anime"),
         Body(
             create_navbar(navbar_links),
             warning(),
-            kumpulan_kartu("Trending Anime", trending_animes, "/trending/1"),
-            pemisah(),
-            kumpulan_kartu("This Season", this_season, "/this-season/1"),
-            pemisah(),
-            kumpulan_kartu(
-                "This Season Movies", this_season_movies, "/season-movies/1"
-            ),
+            Div(hx_get=f"/load-trending/", hx_trigger="load"),
+            Div(hx_get=f"/load-season/", hx_trigger="load"),
+            Div(hx_get=f"/load-season-movies/", hx_trigger="load"),
             pemisah(),
             footer(),
         ),
     )
+
+
+@app.get("/load-trending/")
+def trending_section():
+    trending_animes = fetch_trending_anime(1)
+    return kumpulan_kartu("Trending Anime", trending_animes, "/trending/1")
+
+
+@app.get("/load-season/")
+def trending_section():
+    this_season = fetch_anime_season(1, 12)
+    return kumpulan_kartu("This Season", this_season, "/this-season/1")
+
+
+@app.get("/load-season-movies/")
+def trending_section():
+    this_season_movies = fetch_movie(1, 12)
+    return kumpulan_kartu("This Season Movies", this_season_movies, "/season-movies/1")
+
+
+@app.get("/load-search/{query}")
+def load_search(query: str):
+    return search_section(query)
 
 
 @app.get("/anime/{id}")
@@ -135,7 +151,13 @@ def anime_page(id: int):
                     P(NotStr(anime_data["description"])),
                 ),
                 pemisah(),
-                search_section(anime_data["title"]),
+                Div(
+                    Span(cls="loading loading-spinner loading-lg"),
+                    id="search-section",
+                    hx_get=f"/load-search/{anime_data['title']}",
+                    hx_trigger="load",
+                    cls="mx-auto",
+                ),
                 pemisah(),
             ),
             footer(),
@@ -161,10 +183,10 @@ def search_section(query: str):
                     )
                     for link in list_pencarian
                 ],
-                cls="flex flex-wrap flex-col gap-2 mx-auto justify-center items-center",
+                cls="flex flex-wrap flex-col gap-2 justify-center items-center",
             ),
             id="episodes-selection",
-            cls="flex flex-wrap flex-col gap-2 mx-4 mx-auto justify-center items-center",
+            cls="flex flex-wrap flex-col gap-2 mx-4 justify-center items-center",
         ),
     )
 
