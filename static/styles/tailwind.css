@@ -2255,8 +2255,8 @@ html {
   width: 80%;
 }
 
-.w-44 {
-  width: 11rem;
+.w-40 {
+  width: 10rem;
 }
 
 .w-5 {
@@ -2269,10 +2269,6 @@ html {
 
 .w-6 {
   width: 1.5rem;
-}
-
-.w-auto {
-  width: auto;
 }
 
 .w-full {
