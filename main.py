@@ -400,7 +400,7 @@ def this_season_movies(page: int = 1):
 @app.get("/search/{query:str}/{page:int}")
 def search_page(query: str, page: int = 1):
     navbar_links = COMMON_NAVBAR_LINKS
-    search_results = search_anime(query, page=page, limit=36)
+    search_results = search_anime(query.replace("%20", " "), page=page, limit=36)
     has_next_page = len(search_results) == 36
     query = unquote(query)
 
