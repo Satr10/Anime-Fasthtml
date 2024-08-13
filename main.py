@@ -415,7 +415,7 @@ def search_page(query: str, page: int = 1):
             page_navigation(
                 page,
                 has_next_page,
-                f"search/{encoded_query}",
+                f"search/{query}",
             ),
             footer(),
         ),
