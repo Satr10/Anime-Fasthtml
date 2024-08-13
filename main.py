@@ -7,7 +7,6 @@ from utils import (
     fetch_movie,
     get_current_season,
     search_anime,
-    ambil_tiga_kata,
 )
 from components import *
 import datetime
@@ -136,11 +135,7 @@ def anime_page(id: int):
                     P(NotStr(anime_data["description"])),
                 ),
                 pemisah(),
-                search_section(
-                    ambil_tiga_kata(
-                        anime_data["title"].replace("[", "").replace("]", "")
-                    )  # Untuk menghilangkan tanda kurung, nanti ubah agar lebih rapi
-                ),
+                search_section(anime_data["title"]),
                 pemisah(),
             ),
             footer(),

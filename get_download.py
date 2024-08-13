@@ -4,12 +4,21 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 API_LINK = "https://otakudesu-unofficial-api.vercel.app/v1"
 
 # Gunakan requests.Session untuk mengurangi overhead dari pembuatan koneksi
-session = requests.Session()
+
+
+def ambil_dua_kata(teks):
+    kata = teks.split()
+    return " ".join(kata[:2])
+
+
+def ambil_tiga_kata(teks):
+    kata = teks.split()
+    return " ".join(kata[:3])
 
 
 def request_json(url: str):
     try:
-        response = session.get(url)
+        response = requests.get(url)
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
@@ -18,9 +27,16 @@ def request_json(url: str):
 
 
 def cari_anime(query: str):
-    query = query.replace(" ", "%20")
-    print(f"Searching: {query}")
-    data = request_json(f"{API_LINK}/search/{query}")
+    query_tiga_kata = ambil_tiga_kata(query).replace(" ", "%20")
+    print(f"Searching with three words: {query_tiga_kata}")
+    data = request_json(f"{API_LINK}/search/{query_tiga_kata}")
+
+    # Jika hasil kosong, coba dengan dua kata
+    if not data.get("data"):
+        query_dua_kata = ambil_dua_kata(query).replace(" ", "%20")
+        print(f"No results found, searching with two words: {query_dua_kata}")
+        data = request_json(f"{API_LINK}/search/{query_dua_kata}")
+
     if "Error" in data:
         print(f"Errors: {data['errors']}")
         return []
