@@ -203,7 +203,7 @@ def get_episodes_page(slug: str):
                     Div(
                         Button(
                             f"Episode {episode['Episode']}",
-                            hx_get=f"/download/{episode['Slug']}",
+                            hx_get=f"/download/{episode['Slug']}/{slug}",
                             hx_swap="outerHTML",
                             hx_target="#episodes-selection",
                             cls="btn btn-primary",
@@ -279,8 +279,8 @@ def contact_page():
     )
 
 
-@app.get("/download/{slug}")
-def download_page(slug: str):
+@app.get("/download/{slug}/{previous}")
+def download_page(slug: str, previous: str):
     downloads = get_download(slug)
 
     # Mengelompokkan unduhan berdasarkan provider
@@ -289,6 +289,14 @@ def download_page(slug: str):
         grouped_downloads[download["Provider"]].append(download)
 
     return Div(
+        H2("Download", cls="text-2xl mb-2 font-bold text-center"),
+        Button(
+            f"Kembali ke daftar episode",
+            hx_get=f"/get-episodes/{previous}",
+            hx_swap="outerHTML",
+            hx_target="#episodes-selection",
+            cls="btn btn-primary sm:min-w-96",
+        ),
         *[
             Div(
                 H3(provider, cls="text-xl font-bold mb-2 text-center"),
@@ -309,6 +317,7 @@ def download_page(slug: str):
             )
             for provider, provider_downloads in grouped_downloads.items()
         ],
+        id="episodes-selection",
         cls="m-4",
     )
 
