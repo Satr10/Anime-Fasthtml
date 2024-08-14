@@ -295,7 +295,7 @@ def download_page(slug: str, previous: str):
             hx_get=f"/get-episodes/{previous}",
             hx_swap="outerHTML",
             hx_target="#episodes-selection",
-            cls="btn btn-nutral sm:min-w-96",
+            cls="btn btn-neutral sm:min-w-96",
         ),
         *[
             Div(
